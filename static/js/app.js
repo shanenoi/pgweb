@@ -1470,6 +1470,23 @@ function bindContentModalEvents() {
   })
 }
 
+function openFile() {
+  var input = document.createElement("_input");
+  input.type = "file";
+  input.accept = ".sql";
+  input.onchange = function() {
+    var file = this.files[0];
+    var reader = new FileReader();
+    reader.onload = function() {
+      localStorage.setItem("pgweb_query", reader.result);
+      showQueryPanel()
+      initEditor()
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
 $(document).ready(function() {
   bindInputResizeEvents();
   bindContentModalEvents();
@@ -1682,6 +1699,10 @@ $(document).ready(function() {
         window.location.reload();
       });
     };
+  });
+
+  $("#open_sql_file").on("click", function() {
+    openFile()
   });
 
   $("#edit_connection").on("click", function() {
